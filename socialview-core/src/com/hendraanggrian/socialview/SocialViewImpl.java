@@ -48,16 +48,25 @@ public final class SocialViewImpl implements com.hendraanggrian.socialview.Socia
     private static final Pattern PATTERN_HYPERLINK = Patterns.WEB_URL;
     private static boolean DEBUG;
 
-    @NonNull private final TextView view;
-    @NonNull private final Collection<Object> allSpans;
+    @NonNull
+    private final TextView view;
+    @NonNull
+    private final Collection<Object> allSpans;
     private int enabledFlag;
-    @ColorInt private int hashtagColor;
-    @ColorInt private int mentionColor;
-    @ColorInt private int hyperlinkColor;
-    @Nullable private OnSocialClickListener hashtagListener;
-    @Nullable private OnSocialClickListener mentionListener;
-    @Nullable private SocialTextWatcher hashtagWatcher;
-    @Nullable private SocialTextWatcher mentionWatcher;
+    @ColorInt
+    private int hashtagColor;
+    @ColorInt
+    private int mentionColor;
+    @ColorInt
+    private int hyperlinkColor;
+    @Nullable
+    private OnSocialClickListener hashtagListener;
+    @Nullable
+    private OnSocialClickListener mentionListener;
+    @Nullable
+    private SocialTextWatcher hashtagWatcher;
+    @Nullable
+    private SocialTextWatcher mentionWatcher;
 
     private boolean isHashtagEditing;
     private boolean isMentionEditing;
@@ -267,13 +276,13 @@ public final class SocialViewImpl implements com.hendraanggrian.socialview.Socia
                     isMentionEditing = true;
                     break;
                 default:
-                    if (!Character.isLetterOrDigit(s.charAt(start - 1))) {
+                    if (Character.isWhitespace(s.charAt(start))) {
                         isHashtagEditing = false;
                         isMentionEditing = false;
                     } else if (hashtagWatcher != null && isHashtagEditing) {
-                        hashtagWatcher.onSocialTextChanged(view, s.subSequence(indexOfPreviousNonLetterDigit(s, 0, start - 1) + 1, start).toString());
+                        hashtagWatcher.onSocialTextChanged(view, s.subSequence(indexOfPreviousIsWhiteSpace(s, 0, start - 1) + 1, start).toString());
                     } else if (mentionWatcher != null && isMentionEditing) {
-                        mentionWatcher.onSocialTextChanged(view, s.subSequence(indexOfPreviousNonLetterDigit(s, 0, start - 1) + 1, start).toString());
+                        mentionWatcher.onSocialTextChanged(view, s.subSequence(indexOfPreviousIsWhiteSpace(s, 0, start - 1) + 1, start).toString());
                     }
                     break;
             }
@@ -311,9 +320,9 @@ public final class SocialViewImpl implements com.hendraanggrian.socialview.Socia
                             isHashtagEditing = false;
                             isMentionEditing = false;
                         } else if (hashtagWatcher != null && isHashtagEditing) {
-                            hashtagWatcher.onSocialTextChanged(view, s.subSequence(indexOfPreviousNonLetterDigit(s, 0, start) + 1, start + count).toString());
+                            hashtagWatcher.onSocialTextChanged(view, s.subSequence(indexOfPreviousIsWhiteSpace(s, 0, start) + 1, start + count).toString());
                         } else if (mentionWatcher != null && isMentionEditing) {
-                            mentionWatcher.onSocialTextChanged(view, s.subSequence(indexOfPreviousNonLetterDigit(s, 0, start) + 1, start + count).toString());
+                            mentionWatcher.onSocialTextChanged(view, s.subSequence(indexOfPreviousIsWhiteSpace(s, 0, start) + 1, start + count).toString());
                         }
                         break;
                 }
@@ -325,16 +334,9 @@ public final class SocialViewImpl implements com.hendraanggrian.socialview.Socia
     public void afterTextChanged(Editable s) {
     }
 
-    private int indexOfNextNonLetterDigit(CharSequence text, int start) {
-        for (int i = start + 1; i < text.length(); i++)
-            if (!Character.isLetterOrDigit(text.charAt(i)))
-                return i;
-        return text.length();
-    }
-
-    private int indexOfPreviousNonLetterDigit(CharSequence text, int start, int end) {
+    private int indexOfPreviousIsWhiteSpace(CharSequence text, int start, int end) {
         for (int i = end; i > start; i--)
-            if (!Character.isLetterOrDigit(text.charAt(i)))
+            if (Character.isWhitespace(text.charAt(i)))
                 return i;
         return start;
     }
@@ -412,7 +414,8 @@ public final class SocialViewImpl implements com.hendraanggrian.socialview.Socia
     }
 
     private static abstract class ForegroundColorClickableSpan extends ClickableSpan {
-        @ColorInt private final int color;
+        @ColorInt
+        private final int color;
 
         private ForegroundColorClickableSpan(@ColorInt int color) {
             this.color = color;
@@ -425,8 +428,10 @@ public final class SocialViewImpl implements com.hendraanggrian.socialview.Socia
     }
 
     private static class SimpleURLSpan extends URLSpan {
-        @NonNull private final Spannable spannable;
-        @ColorInt private final int color;
+        @NonNull
+        private final Spannable spannable;
+        @ColorInt
+        private final int color;
 
         private SimpleURLSpan(@NonNull Spannable spannable, @ColorInt int color) {
             super("");
