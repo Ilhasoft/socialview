@@ -1,7 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
 
-group='org.bitbucket.ilhasoft'
+group='com.github.ilhasoft'
 
 android {
     compileSdkVersion versions.sdk.target
