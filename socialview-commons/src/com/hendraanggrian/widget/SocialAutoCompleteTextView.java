@@ -258,11 +258,11 @@ public class SocialAutoCompleteTextView<H, M> extends AppCompatMultiAutoComplete
             if (i > 0 && symbols.contains(text.charAt(i - 1))) {
                 return text;
             } else if (text instanceof Spanned) {
-                final SpannableString sp = new SpannableString(text + " ");
+                final SpannableString sp = new SpannableString(text + "");
                 TextUtils.copySpansFrom((Spanned) text, 0, text.length(), Object.class, sp, 0);
                 return sp;
             } else {
-                return text + " ";
+                return text + "";
             }
         }
     }

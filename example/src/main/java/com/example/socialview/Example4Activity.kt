@@ -33,7 +33,7 @@ class Example4Activity : BaseActivity(), SocialTextWatcher {
         socialAutoCompleteTextView.hashtagAdapter = CustomAdapter(this)
         socialAutoCompleteTextView.mentionAdapter = CustomAdapter(this)
         socialAutoCompleteTextView.setHashtagTextChangedListener(this)
-        socialAutoCompleteTextView.setHashtagTextChangedListener(this)
+        socialAutoCompleteTextView.setMentionTextChangedListener(this)
 
         val hashtag1 = Model("follow")
         val hashtag2 = Model("followme")
