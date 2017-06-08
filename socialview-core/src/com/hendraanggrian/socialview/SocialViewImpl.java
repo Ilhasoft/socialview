@@ -307,7 +307,7 @@ public final class SocialViewImpl implements com.hendraanggrian.socialview.Socia
                         isMentionEditing = true;
                         break;
                     default:
-                        if (!Character.isLetterOrDigit(s.charAt(start))) {
+                        if (Character.isWhitespace(s.charAt(start))) {
                             isHashtagEditing = false;
                             isMentionEditing = false;
                         } else if (hashtagWatcher != null && isHashtagEditing) {
