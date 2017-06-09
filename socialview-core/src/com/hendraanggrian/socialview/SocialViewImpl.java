@@ -24,8 +24,8 @@ import android.util.Patterns;
 import android.view.View;
 import android.widget.TextView;
 
+import com.hendraanggrian.shared.Spannables;
 import com.hendraanggrian.support.utils.content.Themes;
-import com.hendraanggrian.support.utils.text.Spannables;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -52,6 +52,8 @@ public final class SocialViewImpl implements com.hendraanggrian.socialview.Socia
     private final TextView view;
     @NonNull
     private final Collection<Object> allSpans;
+    @NonNull
+    private List<String> mentionsToColorize;
     private int enabledFlag;
     @ColorInt
     private int hashtagColor;
@@ -71,11 +73,14 @@ public final class SocialViewImpl implements com.hendraanggrian.socialview.Socia
     private boolean isHashtagEditing;
     private boolean isMentionEditing;
 
+    private int count = 0;
+
     private SocialViewImpl(@NonNull TextView view, @NonNull Context context, @Nullable AttributeSet attrs) {
         this.view = view;
         this.view.setText(view.getText(), TextView.BufferType.SPANNABLE);
         this.view.addTextChangedListener(this);
         this.allSpans = new ArrayList<>();
+        this.mentionsToColorize = new ArrayList<>();
         int defaultColor = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
                 ? Themes.getColor(view.getContext(), android.R.attr.colorAccent, view.getLinkTextColors().getDefaultColor())
                 : view.getLinkTextColors().getDefaultColor();
@@ -244,6 +249,12 @@ public final class SocialViewImpl implements com.hendraanggrian.socialview.Socia
         return newList(PATTERN_HYPERLINK);
     }
 
+    @Override
+    public void setMentionsToColorize(List<String> mentions) {
+        this.mentionsToColorize = mentions;
+        colorize();
+    }
+
     @NonNull
     private List<String> newList(@NonNull Pattern pattern) {
         Matcher matcher = pattern.matcher(view.getText());
@@ -347,6 +358,7 @@ public final class SocialViewImpl implements com.hendraanggrian.socialview.Socia
 
     private void colorize(@NonNull final Spannable text) {
         // clear all allSpans
+
         Spannables.removeSpans(text, allSpans.toArray());
         allSpans.clear();
         // refill text with new allSpans
@@ -367,18 +379,22 @@ public final class SocialViewImpl implements com.hendraanggrian.socialview.Socia
             }));
         }
         if (isMentionEnabled()) {
-            allSpans.addAll(Spannables.putSpansAll(text, PATTERN_MENTION, new Spannables.SpanGetter() {
+            allSpans.addAll(Spannables.putSpansAll(text, PATTERN_MENTION, new Spannables.SpanGetter2() {
                 @NonNull
                 @Override
-                public Object getSpan() {
-                    if (mentionListener == null)
-                        return new ForegroundColorSpan(mentionColor);
-                    return new ForegroundColorClickableSpan(mentionColor) {
-                        @Override
-                        public void onClick(View widget) {
-                            mentionListener.onSocialClick(view, text.subSequence(text.getSpanStart(this) + 1, text.getSpanEnd(this)).toString());
-                        }
-                    };
+                public Object getSpan(final String mentionValue) {
+                    if (mentionsToColorize.isEmpty() || mentionsToColorize.contains(mentionValue)) {
+                        if (mentionListener == null)
+                            return new ForegroundColorSpan(mentionColor);
+                        return new ForegroundColorClickableSpan(mentionColor) {
+                            @Override
+                            public void onClick(View widget) {
+                                mentionListener.onSocialClick(view, mentionValue);
+                            }
+                        };
+                    } else {
+                        return this;
+                    }
                 }
             }));
         }
