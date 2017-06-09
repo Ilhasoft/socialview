@@ -15,6 +15,7 @@ import com.hendraanggrian.socialview.SocialTextWatcher;
 import com.hendraanggrian.socialview.SocialViewImpl;
 
 import java.util.Collection;
+import java.util.List;
 
 /**
  * @author Hendra Anggrian (com.hendraanggrian@gmail.com)
@@ -165,5 +166,10 @@ public class SocialTextView extends TextView implements SociableView {
     @Override
     public Collection<String> getHyperlinks() {
         return impl.getHyperlinks();
+    }
+
+    @Override
+    public void setMentionsToColorize(List<String> mentions) {
+        impl.setMentionsToColorize(mentions);
     }
 }

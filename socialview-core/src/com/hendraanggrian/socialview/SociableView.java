@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Base methods of all socialview's widgets.
@@ -73,4 +74,6 @@ public interface SociableView {
 
     @NonNull
     Collection<String> getHyperlinks();
+
+    void setMentionsToColorize(List<String> mentions);
 }

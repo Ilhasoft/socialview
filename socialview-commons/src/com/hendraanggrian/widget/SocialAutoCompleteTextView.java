@@ -22,6 +22,7 @@ import com.hendraanggrian.socialview.SocialViewImpl;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * @author Hendra Anggrian (com.hendraanggrian@gmail.com)
@@ -178,6 +179,11 @@ public class SocialAutoCompleteTextView<H, M> extends AppCompatMultiAutoComplete
     @Override
     public Collection<String> getHyperlinks() {
         return impl.getHyperlinks();
+    }
+
+    @Override
+    public void setMentionsToColorize(List<String> mentions) {
+
     }
 
     @Override
